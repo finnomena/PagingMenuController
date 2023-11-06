@@ -314,13 +314,13 @@ extension PagingMenuController: UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         onMove?(.didScrollEnd)
 
-        guard let menuOptions = menuOptions else { return }
+        guard let menuOptions = menuOptions, menuOptions.autoSelectedWhenDecelerating else { return }
 
         let nextPage: Int
-        switch (scrollView, pagingViewController, menuView, menuOptions.autoSelectedWhenDecelerating) {
-        case let (scrollView, pagingViewController?, _, _) where scrollView.isEqual(pagingViewController.contentScrollView):
+        switch (scrollView, pagingViewController, menuView) {
+        case let (scrollView, pagingViewController?, _) where scrollView.isEqual(pagingViewController.contentScrollView):
             nextPage = nextPageFromCurrentPosition
-        case let (scrollView, _, menuView?, autoSelectedWhenDecelerating) where scrollView.isEqual(menuView) && autoSelectedWhenDecelerating:
+        case let (scrollView, _, menuView?) where scrollView.isEqual(menuView):
             nextPage = nextPageFromCurrentPoint
         default: return
         }
@@ -333,6 +333,7 @@ extension PagingMenuController: UIScrollViewDelegate {
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard let menuOptions = menuOptions, menuOptions.autoSelectedWhenDecelerating else { return }
         switch (scrollView, decelerate) {
         case (let scrollView, false) where scrollView.isEqual(menuView): break
         default: return
