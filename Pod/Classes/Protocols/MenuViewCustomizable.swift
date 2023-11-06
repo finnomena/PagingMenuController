@@ -22,6 +22,7 @@ public protocol MenuViewCustomizable {
     var menuPosition: MenuPosition { get }
     var dividerImage: UIImage? { get }
     var itemsOptions: [MenuItemViewCustomizable] { get }
+    var autoSelectedWhenDecelerating: Bool { get }
 }
 
 public extension MenuViewCustomizable {
@@ -60,6 +61,9 @@ public extension MenuViewCustomizable {
     }
     var dividerImage: UIImage? {
         return nil
+    }
+    var autoSelectedWhenDecelerating: Bool {
+        return true
     }
 }
 

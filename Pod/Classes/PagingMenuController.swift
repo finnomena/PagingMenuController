@@ -313,12 +313,14 @@ open class PagingMenuController: UIViewController {
 extension PagingMenuController: UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         onMove?(.didScrollEnd)
-        
+
+        guard let menuOptions = menuOptions else { return }
+
         let nextPage: Int
-        switch (scrollView, pagingViewController, menuView) {
-        case let (scrollView, pagingViewController?, _) where scrollView.isEqual(pagingViewController.contentScrollView):
+        switch (scrollView, pagingViewController, menuView, menuOptions.autoSelectedWhenDecelerating) {
+        case let (scrollView, pagingViewController?, _, _) where scrollView.isEqual(pagingViewController.contentScrollView):
             nextPage = nextPageFromCurrentPosition
-        case let (scrollView, _, menuView?) where scrollView.isEqual(menuView):
+        case let (scrollView, _, menuView?, autoSelectedWhenDecelerating) where scrollView.isEqual(menuView) && autoSelectedWhenDecelerating:
             nextPage = nextPageFromCurrentPoint
         default: return
         }
@@ -478,7 +480,7 @@ extension PagingMenuController {
         menuView?.addGestureRecognizer(rightSwipeGestureRecognizer)
     }
     
-    internal func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
+    @objc internal func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
         guard let menuItemView = recognizer.view as? MenuItemView,
             let menuView = menuView,
             let page = menuView.menuItemViews.index(of: menuItemView),
@@ -503,7 +505,7 @@ extension PagingMenuController {
         move(toPage: newPage)
     }
     
-    internal func handleSwipeGesture(_ recognizer: UISwipeGestureRecognizer) {
+    @objc internal func handleSwipeGesture(_ recognizer: UISwipeGestureRecognizer) {
         guard let menuView = recognizer.view as? MenuView,
             let menuOptions = menuOptions else { return }
         
