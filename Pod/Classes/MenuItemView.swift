@@ -93,7 +93,7 @@ open class MenuItemView: UIView {
                 self.setupImageView(image)
                 self.layoutImageView()
             })
-        case .custom(let view):
+        case .custom(let view, _):
             commonInit({
                 self.setupCustomView(view)
                 self.layoutCustomView()
