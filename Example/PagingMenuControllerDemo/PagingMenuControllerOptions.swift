@@ -133,9 +133,6 @@ struct PagingMenuOptions4: PagingMenuControllerCustomizable {
         var itemsOptions: [MenuItemViewCustomizable] {
             return [MenuItemUsers(), MenuItemRepository(), MenuItemGists(), MenuItemOrganization(), MenuItemUsers(), MenuItemUsers(), MenuItemUsers(), MenuItemUsers()]
         }
-        var autoSelectedWhenDecelerating: Bool {
-            return false
-        }
     }
 }
 
