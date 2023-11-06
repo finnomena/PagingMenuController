@@ -125,13 +125,13 @@ struct PagingMenuOptions4: PagingMenuControllerCustomizable {
     
     struct MenuOptions: MenuViewCustomizable {
         var displayMode: MenuDisplayMode {
-            return .segmentedControl
+            return .standard(widthMode: .flexible, centerItem: true, scrollingMode: .scrollEnabled)
         }
         var focusMode: MenuFocusMode {
-            return .underline(height: 3, color: UIColor.blue, horizontalPadding: 10, verticalPadding: 0)
+            return .underline(height: 4, color: .black, horizontalPadding: 16, verticalPadding: 0)
         }
         var itemsOptions: [MenuItemViewCustomizable] {
-            return [MenuItemUsers(), MenuItemRepository(), MenuItemGists(), MenuItemOrganization()]
+            return [MenuItemUsers(), MenuItemRepository(), MenuItemGists(), MenuItemOrganization(), MenuItemUsers(), MenuItemUsers(), MenuItemUsers(), MenuItemUsers()]
         }
     }
 }

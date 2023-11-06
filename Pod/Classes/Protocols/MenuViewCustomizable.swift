@@ -13,7 +13,7 @@ public protocol MenuViewCustomizable {
     var selectedBackgroundColor: UIColor { get }
     var height: CGFloat { get }
     var animationDuration: TimeInterval { get }
-    var deceleratingRate: CGFloat { get }
+    var deceleratingRate: UIScrollView.DecelerationRate { get }
     var selectedItemCenter: Bool { get }
     var displayMode: MenuDisplayMode { get }
     var focusMode: MenuFocusMode { get }
@@ -22,6 +22,7 @@ public protocol MenuViewCustomizable {
     var menuPosition: MenuPosition { get }
     var dividerImage: UIImage? { get }
     var itemsOptions: [MenuItemViewCustomizable] { get }
+    var autoSelectedWhenDecelerating: Bool { get }
 }
 
 public extension MenuViewCustomizable {
@@ -37,8 +38,8 @@ public extension MenuViewCustomizable {
     var animationDuration: TimeInterval {
         return 0.3
     }
-    var deceleratingRate: CGFloat {
-        return UIScrollViewDecelerationRateFast
+    var deceleratingRate: UIScrollView.DecelerationRate {
+        return UIScrollView.DecelerationRate.fast
     }
     var selectedItemCenter: Bool {
         return true
@@ -60,6 +61,9 @@ public extension MenuViewCustomizable {
     }
     var dividerImage: UIImage? {
         return nil
+    }
+    var autoSelectedWhenDecelerating: Bool {
+        return true
     }
 }
 
