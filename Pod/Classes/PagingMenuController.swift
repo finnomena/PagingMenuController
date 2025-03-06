@@ -83,7 +83,7 @@ open class PagingMenuController: UIViewController {
     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
-        if let menuView = menuView, let menuOptions = menuOptions {
+        if let menuView = menuView {
             menuView.updateMenuViewConstraints(size)
             
             coordinator.animate(alongsideTransition: { [unowned self] (_) -> Void in
@@ -91,15 +91,11 @@ open class PagingMenuController: UIViewController {
                 self.view.layoutIfNeeded()
                 
                 // reset selected menu item view position
-                switch menuOptions.displayMode {
-                case .standard, .infinite:
-                    self.move(toPage: menuView.currentPage)
-                default: break
-                }
+                self.move(toPage: self.currentPage, animated: false)
                 }, completion: nil)
         }
     }
-    
+
     // MARK: - Public
     
     open func setup(_ options: PagingMenuControllerCustomizable) {
