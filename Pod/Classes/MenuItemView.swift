@@ -62,6 +62,7 @@ open class MenuItemView: UIView {
     fileprivate var menuItemOptions: MenuItemViewCustomizable!
     fileprivate var widthConstraint: NSLayoutConstraint!
     fileprivate var descriptionWidthConstraint: NSLayoutConstraint!
+    fileprivate var viewWidth: CGFloat = 0.0
     fileprivate var horizontalMargin: CGFloat {
         switch menuOptions.displayMode {
         case .segmentedControl: return 0.0
@@ -71,12 +72,13 @@ open class MenuItemView: UIView {
     
     // MARK: - Lifecycle
     
-    internal init(menuOptions: MenuViewCustomizable, menuItemOptions: MenuItemViewCustomizable, addDiveder: Bool) {
+    internal init(menuOptions: MenuViewCustomizable, menuItemOptions: MenuItemViewCustomizable, addDiveder: Bool, viewWidth: CGFloat) {
         super.init(frame: .zero)
         
         self.menuOptions = menuOptions
         self.menuItemOptions = menuItemOptions
-        
+        self.viewWidth = viewWidth
+
         switch menuItemOptions.displayMode {
         case .text(let title):
             commonInit({
@@ -324,6 +326,9 @@ extension MenuItemView {
     }
     
     fileprivate var maxWindowSize: CGFloat {
+        if viewWidth > 0.0 {
+            return viewWidth
+        }
         return UIApplication.shared.keyWindow?.bounds.width ?? UIScreen.main.bounds.width
     }
 }

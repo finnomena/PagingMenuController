@@ -78,12 +78,12 @@ open class MenuView: UIScrollView {
     fileprivate var currentIndex: Int = 0
     
     // MARK: - Lifecycle
-    internal init(menuOptions: MenuViewCustomizable) {
+    internal init(menuOptions: MenuViewCustomizable, viewWidth: CGFloat) {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: menuOptions.height))
         
         self.menuOptions = menuOptions
         
-        commonInit({ self.constructMenuItemViews(menuOptions) })
+        commonInit({ self.constructMenuItemViews(menuOptions, viewWidth: viewWidth) })
     }
     
     fileprivate func commonInit(_ constructor: () -> Void) {
@@ -218,9 +218,9 @@ open class MenuView: UIScrollView {
         contentView.layer.addSublayer(border)
     }
     
-    fileprivate func constructMenuItemViews(_ menuOptions: MenuViewCustomizable) {
+    fileprivate func constructMenuItemViews(_ menuOptions: MenuViewCustomizable, viewWidth: CGFloat) {
         constructMenuItemViews({
-            return MenuItemView(menuOptions: menuOptions, menuItemOptions: menuOptions.itemsOptions[$0], addDiveder: $1)
+            return MenuItemView(menuOptions: menuOptions, menuItemOptions: menuOptions.itemsOptions[$0], addDiveder: $1, viewWidth: viewWidth)
         })
     }
     
