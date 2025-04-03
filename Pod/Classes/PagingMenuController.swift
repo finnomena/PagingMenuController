@@ -622,15 +622,15 @@ extension UIViewController {
 
     fileprivate var isPresentedModally: Bool {
 
-        if presentingViewController != nil, navigationController == nil {
+        if parent?.presentingViewController != nil, parent?.navigationController == nil {
             return true
         }
-        if let navigationController = navigationController,
+        if let navigationController = parent?.navigationController,
            navigationController.presentingViewController != nil,
-           navigationController.viewControllers.first == self {
+           navigationController.viewControllers.first == self.parent {
             return true
         }
-        if let tabBarController = tabBarController, tabBarController.presentingViewController is UITabBarController {
+        if let tabBarController = parent?.tabBarController, tabBarController.presentingViewController is UITabBarController {
             return true
         }
         return false
