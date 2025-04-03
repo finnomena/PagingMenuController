@@ -96,11 +96,11 @@ open class PagingMenuController: UIViewController {
         }
     }
 
-    // MARK: - Public
-    
-    open func setup(_ options: PagingMenuControllerCustomizable) {
-        self.options = options
-        
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        guard UIDevice.current.userInterfaceIdiom == .pad, isPresentedModally else { return }
+
         switch options.componentType {
         case .all(let menuOptions, _):
             self.menuOptions = menuOptions
@@ -108,10 +108,31 @@ open class PagingMenuController: UIViewController {
             self.menuOptions = menuOptions
         default: break
         }
-        
+
         setupMenuView()
         setupMenuController()
-        
+
+        move(toPage: currentPage, animated: false)
+    }
+
+    // MARK: - Public
+    
+    open func setup(_ options: PagingMenuControllerCustomizable) {
+        self.options = options
+
+        guard UIDevice.current.userInterfaceIdiom != .pad || !isPresentedModally else { return }
+
+        switch options.componentType {
+        case .all(let menuOptions, _):
+            self.menuOptions = menuOptions
+        case .menuView(let menuOptions):
+            self.menuOptions = menuOptions
+        default: break
+        }
+
+        setupMenuView()
+        setupMenuController()
+
         move(toPage: currentPage, animated: false)
     }
     
@@ -199,8 +220,14 @@ open class PagingMenuController: UIViewController {
     fileprivate func constructMenuView() {
         guard let menuOptions = self.menuOptions else { return }
         
-        menuView = MenuView(menuOptions: menuOptions)
-        
+        let viewWidth: CGFloat
+        if UIDevice.current.userInterfaceIdiom == .pad, isPresentedModally {
+            viewWidth = view.frame.width
+        } else {
+            viewWidth = UIApplication.shared.keyWindow?.bounds.width ?? UIScreen.main.bounds.width
+        }
+        menuView = MenuView(menuOptions: menuOptions, viewWidth: viewWidth)
+
         addTapGestureHandler()
         addSwipeGestureHandler()
     }
@@ -588,5 +615,24 @@ extension PagingMenuController {
     
     fileprivate func raise(_ reason: String) {
         NSException(name: NSExceptionName(rawValue: exceptionName), reason: reason, userInfo: nil).raise()
+    }
+}
+
+extension UIViewController {
+
+    fileprivate var isPresentedModally: Bool {
+
+        if presentingViewController != nil, navigationController == nil {
+            return true
+        }
+        if let navigationController = navigationController,
+           navigationController.presentingViewController != nil,
+           navigationController.viewControllers.first == self {
+            return true
+        }
+        if let tabBarController = tabBarController, tabBarController.presentingViewController is UITabBarController {
+            return true
+        }
+        return false
     }
 }
